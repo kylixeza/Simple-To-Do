@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.kylix.algostudioseniormobiledevelopertest"
-    compileSdk = 34
+    namespace = App.applicationId
+    compileSdk = App.compileSdk
 
     defaultConfig {
-        applicationId = "com.kylix.algostudioseniormobiledevelopertest"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = App.applicationId
+        minSdk = App.minSdk
+        targetSdk = App.targetSdk
+        versionCode = App.versionCode
+        versionName = App.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -21,14 +21,19 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -40,30 +45,36 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = Versions.compose
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    productFlavors {
+        create(Flavors.dev) {
+            dimension = "version"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "${App.name}-dev")
+        }
+        create(Flavors.prod) {
+            dimension = "version"
+            resValue("string", "app_name", App.name)
+        }
+    }
 }
 
 dependencies {
+    implOf (Libs.coreKtx)
+    implOf (Libs.lifecycleKtx)
+    implOf (Libs.activityCompose)
+    platformImplOf (Libs.composeBom)
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
-    implementation("androidx.activity:activity-compose:1.9.1")
-    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implOf (Libs.composeUi)
+    implOf (Libs.composeUiGraphics)
+    implOf (Libs.composeUiToolingPreview)
+    implOf (Libs.composeMaterial3)
 }
