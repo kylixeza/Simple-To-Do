@@ -18,9 +18,9 @@ object Flavors {
 object Versions {
     const val kotlin = "1.9.20"
     const val agp = "8.2.0"
-    const val compose = "1.5.1"
+    const val compose = "1.5.5"
 
-    const val coreKtx = "1.31.1"
+    const val coreKtx = "1.13.1"
     const val lifecycleKtx = "2.8.4"
     const val activityCompose = "1.9.1"
     const val composeBom = "2023.08.00"
@@ -28,6 +28,8 @@ object Versions {
     const val junit = "4.13.2"
     const val extJunit = "1.2.1"
     const val espresso = "3.6.1"
+
+    const val koin = "3.5.6"
 }
 
 object Libs {
@@ -40,6 +42,11 @@ object Libs {
     const val composeUiGraphics = "androidx.compose.ui:ui-graphics"
     const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview"
     const val composeMaterial3 = "androidx.compose.material3:material3"
+
+    const val koinBom = "io.insert-koin:koin-bom:${Versions.koin}"
+    const val koinCore = "io.insert-koin:koin-core:${Versions.koin}"
+    const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
+    const val koinCompose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
 }
 
 object TestDependencies {
@@ -67,4 +74,17 @@ infix fun DependencyHandler.androidTestImplOf(dependency: String) {
 
 infix fun DependencyHandler.debugImplementation(dependency: String) {
     add("debugImplementation", dependency)
+}
+
+fun DependencyHandler.implComposeDependencies() {
+    add("implementation", Libs.composeUi)
+    add("implementation", Libs.composeUiGraphics)
+    add("implementation", Libs.composeUiToolingPreview)
+    add("implementation", Libs.composeMaterial3)
+}
+
+fun DependencyHandler.implKoinDependencies() {
+    add("implementation", Libs.koinCore)
+    add("implementation", Libs.koinAndroid)
+    add("implementation", Libs.koinCompose)
 }

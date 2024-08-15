@@ -53,6 +53,7 @@ android {
         }
     }
 
+    flavorDimensions += "version"
     productFlavors {
         create(Flavors.dev) {
             dimension = "version"
@@ -68,13 +69,15 @@ android {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
     implOf (Libs.coreKtx)
     implOf (Libs.lifecycleKtx)
     implOf (Libs.activityCompose)
+
+    platformImplOf (Libs.koinBom)
     platformImplOf (Libs.composeBom)
 
-    implOf (Libs.composeUi)
-    implOf (Libs.composeUiGraphics)
-    implOf (Libs.composeUiToolingPreview)
-    implOf (Libs.composeMaterial3)
+    implComposeDependencies()
+    implKoinDependencies()
 }
