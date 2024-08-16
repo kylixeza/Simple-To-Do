@@ -5,13 +5,15 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kylix.algostudioseniormobiledevelopertest.data.local.TaskDatabase
 import com.kylix.algostudioseniormobiledevelopertest.data.local.entitiy.TaskEntity
+import com.kylix.algostudioseniormobiledevelopertest.data.repository.TaskRepository
+import com.kylix.algostudioseniormobiledevelopertest.data.repository.TaskRepositoryImpl
 import com.kylix.algostudioseniormobiledevelopertest.utils.getCurrentDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.dsl.module
 
-val dataModule = module {
+val databaseModule = module {
     single {
         Room.databaseBuilder(
             get(), TaskDatabase::class.java, "task_database"
@@ -40,4 +42,8 @@ val dataModule = module {
         }).build()
     }
     single { get<TaskDatabase>().taskDao() }
+}
+
+val repositoryModule = module {
+    single<TaskRepository> { TaskRepositoryImpl(get()) }
 }

@@ -1,20 +1,23 @@
 package com.kylix.algostudioseniormobiledevelopertest.data.local
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.kylix.algostudioseniormobiledevelopertest.data.local.entitiy.TaskEntity
+import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface TaskDao {
     @Query("SELECT * FROM task")
-    fun getAllTasks(): List<TaskEntity>
+    fun getAllTasks(): Flow<List<TaskEntity>>
 
     @Query("SELECT MAX(position) FROM task")
-    fun getMaxPosition(): Int?
+    fun getMaxPosition(): Flow<Int>?
 
     @Insert
-    fun insertTask(task: TaskEntity)
+    suspend fun insertTask(task: TaskEntity)
 
     @Delete
-    fun deleteTask(task: TaskEntity)
+    suspend fun deleteTask(task: TaskEntity)
 }

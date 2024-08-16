@@ -1,12 +1,15 @@
 package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.kylix.algostudioseniormobiledevelopertest.data.local.Dummy
+import androidx.lifecycle.viewModelScope
+import com.kylix.algostudioseniormobiledevelopertest.data.repository.TaskRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class ToDoViewModel: ViewModel() {
+class ToDoViewModel(
+    private val repository: TaskRepository
+): ViewModel() {
 
     private val _toDoState = MutableStateFlow(ToDoState())
     val toDoState = _toDoState.asStateFlow()
@@ -16,11 +19,13 @@ class ToDoViewModel: ViewModel() {
     }
 
     private fun getTasks() {
-        val tasks = Dummy.getTasks()
-        Log.d("ToDoViewModel", "$tasks")
-        _toDoState.value = _toDoState.value.copy(
-            task = tasks
-        )
+        viewModelScope.launch {
+            repository.getAllTasks().collect { tasks ->
+                _toDoState.value = _toDoState.value.copy(
+                    task = tasks
+                )
+            }
+        }
     }
 
     fun onTaskChecked(id: Int, isChecked: Boolean) {
@@ -39,10 +44,6 @@ class ToDoViewModel: ViewModel() {
     }
 
     fun deleteItemsByDay(day: String) {
-        Dummy.deleteItemsByDay(day)
-        val tasks = Dummy.getTasks()
-        _toDoState.value = _toDoState.value.copy(
-            task = tasks
-        )
+
     }
 }

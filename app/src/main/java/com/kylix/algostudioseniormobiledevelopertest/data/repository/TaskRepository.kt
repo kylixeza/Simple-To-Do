@@ -1,9 +1,10 @@
 package com.kylix.algostudioseniormobiledevelopertest.data.repository
 
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
+import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
-    fun getAllTasks(): List<Task>
-    fun insertTask(task: Task)
-    fun deleteTask(task: Task)
+    suspend fun getAllTasks(): Flow<Map<String, List<Task>>>
+    suspend fun insertTask(task: Task)
+    suspend fun deleteTask(task: Task)
 }
