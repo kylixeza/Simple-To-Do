@@ -1,20 +1,18 @@
 package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,7 +32,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -49,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,7 +53,6 @@ import androidx.compose.ui.unit.sp
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.Black
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
-import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepOrange
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.Gray
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.LightBlue
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.LightGray
@@ -198,6 +193,7 @@ fun TaskHeader(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
@@ -210,15 +206,16 @@ fun TaskItem(
         modifier = modifier
             .padding(horizontal = 24.dp, vertical = 6.dp)
             .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = {
-                        onHoldPressed()
-                    }
-                )
-            },
-        shape = MaterialTheme.shapes.medium,
-        shadowElevation = 2.dp,
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    onHoldPressed()
+                },
+            ),
         color = White,
     ) {
         Row(
@@ -241,7 +238,7 @@ fun TaskItem(
                     },
                     colors = CheckboxDefaults.colors(
                         checkedColor = DeepBlue,
-                        uncheckedColor = DeepBlue,
+                        uncheckedColor = LightBlue,
                         checkmarkColor = White
                     )
                 )
@@ -250,7 +247,7 @@ fun TaskItem(
             Column {
                 Text(
                     text = task.title,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Black
                 )
