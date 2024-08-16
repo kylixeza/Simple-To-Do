@@ -25,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -60,8 +61,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen() {
-    val coroutineScope = rememberCoroutineScope()
+fun AddTaskScreen(
+    onBack: () -> Unit = { }
+) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
@@ -95,12 +97,16 @@ fun AddTaskScreen() {
                         }
                     },
                     navigationIcon = {
-                        Icon(
-                            Icons.Filled.ArrowBack,
-                            contentDescription = null,
-                            tint = DeepBlue,
-                            modifier = Modifier.size(24.dp)
-                        )
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = onBack
+                        ) {
+                            Icon(
+                                Icons.Filled.ArrowBack,
+                                contentDescription = null,
+                                tint = DeepBlue,
+                            )
+                        }
                     }
                 )
                 Divider(
@@ -168,7 +174,7 @@ fun AddTaskScreen() {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
-                    checked = time.isNotEmpty(),
+                    checked = time.isNotEmpty() || showTimeBottomSheet,
                     onCheckedChange = {
                         if (time.isEmpty() && it) {
                             showTimeBottomSheet = true
@@ -193,7 +199,7 @@ fun AddTaskScreen() {
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = { onBack() },
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(1.dp, DeepBlue),
                 ) {

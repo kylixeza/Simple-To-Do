@@ -77,7 +77,7 @@ fun BaseDateTimeModalBottomSheet(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(top = 16.dp, bottom = 42.dp, start = 16.dp, end = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 OutlinedButton(
@@ -169,7 +169,8 @@ fun TimeModalBottomSheet(
         onSave = { onSave(time) }
     ) {
         WheelTimePicker(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
             textColor = DeepBlue,
             onSnappedTime = {
                 time = "${it.hour}:${it.minute}"

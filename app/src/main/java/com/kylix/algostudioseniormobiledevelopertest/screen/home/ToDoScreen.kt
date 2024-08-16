@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.Black
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
@@ -53,8 +54,9 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ToDoScreen(
+    modifier: Modifier = Modifier,
     viewModel: ToDoViewModel = koinViewModel(),
-    modifier: Modifier = Modifier
+    onAddTask: () -> Unit = {}
 ) {
     val state = viewModel.toDoState.collectAsState()
 
@@ -70,13 +72,13 @@ fun ToDoScreen(
             ) {
                 Text(
                     text = "To Do List",
-                    fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = FontFamily.Default
                 )
 
                 Button(
-                    onClick = { },
+                    onClick = { onAddTask() },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = DeepBlue
                     ),
