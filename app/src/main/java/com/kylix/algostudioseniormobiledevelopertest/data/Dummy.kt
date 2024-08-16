@@ -1,10 +1,11 @@
 package com.kylix.algostudioseniormobiledevelopertest.data
 
+import android.util.Log
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
 
 object Dummy {
 
-    fun getTasks() = listOf(
+    private val tasks = mutableListOf(
         Task(
             id = 1,
             title = "Task 1",
@@ -53,5 +54,16 @@ object Dummy {
             date = "2022-08-17",
             time = "16:00"
         ),
-    ).sortedBy { it.date }.groupBy { it.date }
+    )
+
+    fun getTasks(): Map<String, List<Task>> {
+        Log.d("DummyData", "$tasks")
+        return tasks.sortedBy { it.date }.groupBy { it.date }
+    }
+
+    fun deleteItemsByDay(day: String) {
+        tasks.filter { it.date == day && it.isSelected }.forEach { task ->
+            tasks.remove(task)
+        }
+    }
 }

@@ -22,4 +22,27 @@ class ToDoViewModel: ViewModel() {
             task = tasks
         )
     }
+
+    fun onTaskChecked(id: Int, isChecked: Boolean) {
+        val tasks = _toDoState.value.task.mapValues { (date, tasks) ->
+            tasks.map { task ->
+                if (task.id == id) {
+                    task.copy(isSelected = isChecked)
+                } else {
+                    task
+                }
+            }
+        }
+        _toDoState.value = _toDoState.value.copy(
+            task = tasks
+        )
+    }
+
+    fun deleteItemsByDay(day: String) {
+        Dummy.deleteItemsByDay(day)
+        val tasks = Dummy.getTasks()
+        _toDoState.value = _toDoState.value.copy(
+            task = tasks
+        )
+    }
 }
