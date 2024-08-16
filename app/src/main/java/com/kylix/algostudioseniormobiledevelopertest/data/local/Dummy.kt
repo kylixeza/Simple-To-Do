@@ -1,4 +1,4 @@
-package com.kylix.algostudioseniormobiledevelopertest.data
+package com.kylix.algostudioseniormobiledevelopertest.data.local
 
 import android.util.Log
 import com.kylix.algostudioseniormobiledevelopertest.model.Task

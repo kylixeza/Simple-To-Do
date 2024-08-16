@@ -2,7 +2,7 @@ package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.kylix.algostudioseniormobiledevelopertest.data.Dummy
+import com.kylix.algostudioseniormobiledevelopertest.data.local.Dummy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

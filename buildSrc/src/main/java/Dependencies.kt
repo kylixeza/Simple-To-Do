@@ -30,6 +30,7 @@ object Versions {
     const val espresso = "3.6.1"
 
     const val koin = "3.5.6"
+    const val room = "2.6.1"
 }
 
 object Libs {
@@ -47,6 +48,10 @@ object Libs {
     const val koinCore = "io.insert-koin:koin-core:${Versions.koin}"
     const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
     const val koinCompose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
+
+    const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
+    const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
+    const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
 }
 
 object TestDependencies {
@@ -87,4 +92,9 @@ fun DependencyHandler.implKoinDependencies() {
     add("implementation", Libs.koinCore)
     add("implementation", Libs.koinAndroid)
     add("implementation", Libs.koinCompose)
+}
+
+fun DependencyHandler.implRoomDependencies() {
+    add("implementation", Libs.roomRuntime)
+    add("implementation", Libs.roomKtx)
 }

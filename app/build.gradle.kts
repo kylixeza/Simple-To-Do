@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -81,6 +82,8 @@ dependencies {
 
     implComposeDependencies()
     implKoinDependencies()
+    implRoomDependencies()
+    ksp(Libs.roomCompiler)
 
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
     implementation("com.airbnb.android:lottie-compose:4.2.0")

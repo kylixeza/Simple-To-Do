@@ -6,5 +6,6 @@ data class Task(
     val description: String,
     val date: String,
     val time: String,
+    val position: Int,
     val isSelected: Boolean = false
 )

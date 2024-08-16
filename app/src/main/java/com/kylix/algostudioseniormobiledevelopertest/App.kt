@@ -1,6 +1,7 @@
 package com.kylix.algostudioseniormobiledevelopertest
 
 import android.app.Application
+import com.kylix.algostudioseniormobiledevelopertest.di.dataModule
 import com.kylix.algostudioseniormobiledevelopertest.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -15,7 +16,8 @@ class App: Application() {
             androidLogger(Level.ERROR)
             androidContext(this@App)
             modules(
-                viewModelModule
+                viewModelModule,
+                dataModule
             )
         }
     }
