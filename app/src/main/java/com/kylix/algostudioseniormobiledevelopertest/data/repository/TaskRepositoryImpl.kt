@@ -2,10 +2,10 @@ package com.kylix.algostudioseniormobiledevelopertest.data.repository
 
 import android.util.Log
 import com.kylix.algostudioseniormobiledevelopertest.data.local.TaskDao
+import com.kylix.algostudioseniormobiledevelopertest.data.local.entitiy.TaskEntity
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -19,13 +19,28 @@ class TaskRepositoryImpl(
                 taskEntity.toTask()
             }
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            Log.d("TaskRepositoryImpl", "$tasks")
-            tasks.sortedBy { LocalDate.parse(it.date, formatter) }.groupBy { it.date }
+            tasks.sortedBy { LocalDate.parse(it.date, formatter) }.groupBy { it.date }.map { entry ->
+                entry.key to entry.value.sortedBy { it.position }
+            }.toMap()
         }
     }
 
-    override suspend fun insertTask(task: Task) {
-        TODO("Not yet implemented")
+    override suspend fun insertTask(
+        title: String,
+        description: String,
+        date: String,
+        time: String?
+    ) {
+        val currentMaxPosition = taskDao.getMaxPosition()?.first() ?: 0
+        val entity = TaskEntity(
+            title = title,
+            description = description,
+            date = date,
+            time = time,
+            position = currentMaxPosition + 1
+        )
+        Log.d("TaskRepositoryImpl", "insertTask: $entity")
+        taskDao.insertTask(entity)
     }
 
     override suspend fun deleteTask(task: Task) {

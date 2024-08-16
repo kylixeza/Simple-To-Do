@@ -8,3 +8,9 @@ fun getCurrentDate(): String {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     return currentDate.format(formatter)
 }
+
+fun String.convertToFormattedDate(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val date = LocalDate.parse(this, formatter)
+    return date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+}

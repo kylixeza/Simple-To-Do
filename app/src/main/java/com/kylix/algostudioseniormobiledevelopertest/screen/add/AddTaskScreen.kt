@@ -58,10 +58,12 @@ import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DarkGray
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.White
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTaskScreen(
+    viewModel: AddTaskViewModel = koinViewModel(),
     onBack: () -> Unit = { }
 ) {
     var title by remember { mutableStateOf("") }
@@ -213,7 +215,13 @@ fun AddTaskScreen(
                         .weight(1f)
                         .padding(start = 8.dp),
                     onClick = {
-
+                        viewModel.insertTask(
+                            title = title,
+                            description = description,
+                            date = date,
+                            time = time.ifEmpty { null }
+                        )
+                        onBack()
                     },
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(

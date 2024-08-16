@@ -145,7 +145,8 @@ fun DateModalBottomSheet(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             textColor = DeepBlue,
             onSnappedDate = {
-                date = "${it.dayOfMonth}/${it.monthValue}/${it.year}"
+                val month = if (it.monthValue < 10) "0${it.monthValue}" else it.monthValue
+                date = "${it.dayOfMonth}/$month/${it.year}"
             }
         )
     }
