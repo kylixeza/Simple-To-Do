@@ -1,4 +1,4 @@
-package com.kylix.algostudioseniormobiledevelopertest.screen
+package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
 import java.util.SortedMap

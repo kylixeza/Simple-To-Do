@@ -80,4 +80,6 @@ dependencies {
 
     implComposeDependencies()
     implKoinDependencies()
+
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
 }

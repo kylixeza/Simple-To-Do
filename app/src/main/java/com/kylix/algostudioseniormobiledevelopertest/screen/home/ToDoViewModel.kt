@@ -1,4 +1,4 @@
-package com.kylix.algostudioseniormobiledevelopertest.screen
+package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
