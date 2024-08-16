@@ -39,11 +39,10 @@ class TaskRepositoryImpl(
             time = time,
             position = currentMaxPosition + 1
         )
-        Log.d("TaskRepositoryImpl", "insertTask: $entity")
         taskDao.insertTask(entity)
     }
 
-    override suspend fun deleteTask(task: Task) {
-        TODO("Not yet implemented")
+    override suspend fun deleteTask(id: Int) {
+        taskDao.deleteTask(id)
     }
 }

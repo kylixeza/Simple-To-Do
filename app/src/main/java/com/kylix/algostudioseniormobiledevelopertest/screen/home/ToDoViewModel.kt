@@ -43,7 +43,18 @@ class ToDoViewModel(
         )
     }
 
-    fun deleteItemsByDay(day: String) {
+    fun deleteItemsByDay(date: String) {
+        viewModelScope.launch {
+            val tasksOnThatDate = _toDoState.value.task[date]?.filter { it.isSelected } ?: emptyList()
+            tasksOnThatDate.forEach { task ->
+                repository.deleteTask(task.id)
+            }
+        }
+    }
 
+    fun deleteSpecificTask(id: Int) {
+        viewModelScope.launch {
+            repository.deleteTask(id)
+        }
     }
 }

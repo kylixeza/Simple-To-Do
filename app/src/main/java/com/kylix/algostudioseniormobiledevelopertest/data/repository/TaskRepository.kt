@@ -11,5 +11,5 @@ interface TaskRepository {
         date: String,
         time: String?
     )
-    suspend fun deleteTask(task: Task)
+    suspend fun deleteTask(id: Int)
 }

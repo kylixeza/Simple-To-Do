@@ -39,6 +39,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -76,6 +77,7 @@ fun ToDoScreen(
 
     val deleteModal = rememberModalBottomSheetState()
     var currentDateWantToDelete by remember { mutableStateOf("") }
+    var specificTaskIdWantToDelete by remember { mutableIntStateOf(-1) }
     var showDeleteModal by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -133,6 +135,7 @@ fun ToDoScreen(
                     }
                     itemsIndexed(
                         tasks,
+                        key = { _, task -> task.id }
                     ) { index, task ->
                         TaskItem(
                             task = task,
@@ -140,7 +143,7 @@ fun ToDoScreen(
                                 viewModel.onTaskChecked(task.id, isChecked)
                             },
                             onHoldPressed = {
-                                currentDateWantToDelete = date
+                                specificTaskIdWantToDelete = it
                                 showDeleteModal = true
                             }
                         )
@@ -170,9 +173,12 @@ fun ToDoScreen(
             onDismissRequest = { showDeleteModal = false },
             onCancel = { showDeleteModal = false },
             onDelete = {
-                viewModel.deleteItemsByDay(currentDateWantToDelete)
+                if (specificTaskIdWantToDelete == -1) {
+                    viewModel.deleteItemsByDay(currentDateWantToDelete)
+                } else {
+                    viewModel.deleteSpecificTask(specificTaskIdWantToDelete)
+                }
                 showDeleteModal = false
-                currentDateWantToDelete = ""
             }
         )
     }
@@ -204,7 +210,7 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     task: Task,
     onChecked: (Boolean) -> Unit = {},
-    onHoldPressed: () -> Unit = {}
+    onHoldPressed: (Int) -> Unit = {}
 ) {
 
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset("confetti.json"))
@@ -225,7 +231,7 @@ fun TaskItem(
             .combinedClickable(
                 onClick = {},
                 onLongClick = {
-                    onHoldPressed()
+                    onHoldPressed(task.id)
                 },
             ),
         color = White,
