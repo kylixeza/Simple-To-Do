@@ -50,6 +50,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieClipSpec
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.Black
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
@@ -201,6 +206,13 @@ fun TaskItem(
     onChecked: (Boolean) -> Unit = {},
     onHoldPressed: () -> Unit = {}
 ) {
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.Asset("confetti.json"))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        isPlaying = task.isSelected,
+        restartOnPlay = true,
+    )
 
     Surface(
         modifier = modifier

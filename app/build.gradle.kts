@@ -83,4 +83,5 @@ dependencies {
     implKoinDependencies()
 
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+    implementation("com.airbnb.android:lottie-compose:4.2.0")
 }
