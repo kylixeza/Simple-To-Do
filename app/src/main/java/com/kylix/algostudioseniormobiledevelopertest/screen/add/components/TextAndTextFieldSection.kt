@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ fun TextAndTextFieldSection(
     minSize: Dp = Dp.Unspecified,
     maxSize: Dp = Dp.Unspecified,
     needClick: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onClicked: () -> Unit = {  },
     onValueChange: (String) -> Unit = {},
 ) {
@@ -55,10 +57,11 @@ fun TextAndTextFieldSection(
             .padding(12.dp)
             .heightIn(min = minSize, max = maxSize),
         textStyle = TextStyle(
-            color = Color.Gray,
+            color = Color.Black,
             fontSize = 16.sp
         ),
         readOnly = needClick,
+        keyboardOptions = keyboardOptions,
         decorationBox = { innerTextField ->
             val rows: @Composable () -> Unit  = {
                 Row(

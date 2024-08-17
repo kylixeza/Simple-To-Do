@@ -4,10 +4,20 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-fun getCurrentDate(): String {
+fun getCurrentDate(
+    pattern: String = "dd-MM-yyyy"
+): String {
     val currentDate = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val formatter = DateTimeFormatter.ofPattern(pattern)
     return currentDate.format(formatter)
+}
+
+fun String.convertToTextFieldDate(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val date = LocalDate.parse(this, formatter)
+    val day = if (date.dayOfMonth < 10) "0${date.dayOfMonth}" else "${date.dayOfMonth}"
+    val month = if (date.monthValue < 10) "0${date.monthValue}" else "${date.monthValue}"
+    return "$day/$month/${date.year}"
 }
 
 fun String.convertToFormattedDate(): String {

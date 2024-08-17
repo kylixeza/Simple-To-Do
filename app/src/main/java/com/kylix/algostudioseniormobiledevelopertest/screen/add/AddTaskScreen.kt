@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -53,12 +55,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kylix.algostudioseniormobiledevelopertest.R
 import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.DateModalBottomSheet
+import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.TextAndHighlightedTextField
 import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.TextAndTextFieldSection
 import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.TimeModalBottomSheet
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.Black
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DarkGray
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.White
+import com.kylix.algostudioseniormobiledevelopertest.utils.convertToTextFieldDate
+import com.kylix.algostudioseniormobiledevelopertest.utils.getCurrentDate
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -125,17 +130,26 @@ fun AddTaskScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            TextAndTextFieldSection(
+            TextAndHighlightedTextField(
                 text = "Title",
                 value = title,
-                placeholder = "Title Task"
-            ) { title = it }
+                placeholder = "Title Task",
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                )
+            ) { value, containHighlightedWord ->
+                title = value
+                if (containHighlightedWord) date = getCurrentDate().convertToTextFieldDate()
+            }
             Spacer(modifier = Modifier.height(12.dp))
             TextAndTextFieldSection(
                 text = "Description",
                 value = description,
                 placeholder = "Description Task",
-                minSize = 64.dp
+                minSize = 64.dp,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                )
             ) { description = it }
             Spacer(modifier = Modifier.height(12.dp))
             TextAndTextFieldSection(
