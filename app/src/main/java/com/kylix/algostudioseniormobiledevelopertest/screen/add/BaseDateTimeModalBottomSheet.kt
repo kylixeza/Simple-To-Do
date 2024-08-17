@@ -145,8 +145,9 @@ fun DateModalBottomSheet(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             textColor = DeepBlue,
             onSnappedDate = {
-                val month = if (it.monthValue < 10) "0${it.monthValue}" else it.monthValue
-                date = "${it.dayOfMonth}/$month/${it.year}"
+                val day = if (it.dayOfMonth < 10) "0${it.dayOfMonth}" else "${it.dayOfMonth}"
+                val month = if (it.monthValue < 10) "0${it.monthValue}" else "${it.monthValue}"
+                date = "$day/$month/${it.year}"
             }
         )
     }
@@ -174,7 +175,9 @@ fun TimeModalBottomSheet(
                 .padding(16.dp),
             textColor = DeepBlue,
             onSnappedTime = {
-                time = "${it.hour}:${it.minute}"
+                val hour = if (it.hour < 10) "0${it.hour}" else it.hour
+                val minute = if (it.minute < 10) "0${it.minute}" else it.minute
+                time = "$hour:$minute"
             }
         )
     }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.kylix.algostudioseniormobiledevelopertest.data.local.TaskDao
 import com.kylix.algostudioseniormobiledevelopertest.data.local.entitiy.TaskEntity
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
+import com.kylix.algostudioseniormobiledevelopertest.utils.calculateDateDifference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -20,7 +21,10 @@ class TaskRepositoryImpl(
             }
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
             tasks.sortedBy { LocalDate.parse(it.date, formatter) }.groupBy { it.date }.map { entry ->
-                entry.key to entry.value.sortedBy { it.position }
+                val renamedKey = entry.key.calculateDateDifference()
+                val sortedValue = entry.value.sortedBy { it.position }
+
+                renamedKey to sortedValue
             }.toMap()
         }
     }
