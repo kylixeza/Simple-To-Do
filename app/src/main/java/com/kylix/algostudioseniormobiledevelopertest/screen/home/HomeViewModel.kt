@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ToDoViewModel(
+class HomeViewModel(
     private val repository: TaskRepository
 ): ViewModel() {
 
-    private val _toDoState = MutableStateFlow(ToDoState())
-    val toDoState = _toDoState.asStateFlow()
+    private val _homeState = MutableStateFlow(HomeState())
+    val toDoState = _homeState.asStateFlow()
 
     init {
         getTasks()
@@ -21,7 +21,7 @@ class ToDoViewModel(
     private fun getTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collect { tasks ->
-                _toDoState.value = _toDoState.value.copy(
+                _homeState.value = _homeState.value.copy(
                     task = tasks
                 )
             }
@@ -29,7 +29,7 @@ class ToDoViewModel(
     }
 
     fun onTaskChecked(id: Int, isChecked: Boolean) {
-        val tasks = _toDoState.value.task.mapValues { (date, tasks) ->
+        val tasks = _homeState.value.task.mapValues { (date, tasks) ->
             tasks.map { task ->
                 if (task.id == id) {
                     task.copy(isSelected = isChecked)
@@ -38,14 +38,14 @@ class ToDoViewModel(
                 }
             }
         }
-        _toDoState.value = _toDoState.value.copy(
+        _homeState.value = _homeState.value.copy(
             task = tasks
         )
     }
 
     fun deleteItemsByDay(date: String) {
         viewModelScope.launch {
-            val tasksOnThatDate = _toDoState.value.task[date]?.filter { it.isSelected } ?: emptyList()
+            val tasksOnThatDate = _homeState.value.task[date]?.filter { it.isSelected } ?: emptyList()
             tasksOnThatDate.forEach { task ->
                 repository.deleteTask(task.id)
             }

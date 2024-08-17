@@ -48,9 +48,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ToDoScreen(
+fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: ToDoViewModel = koinViewModel(),
+    viewModel: HomeViewModel = koinViewModel(),
     onAddTask: () -> Unit = {}
 ) {
     val state = viewModel.toDoState.collectAsState()

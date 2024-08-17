@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kylix.algostudioseniormobiledevelopertest.screen.add.AddTaskScreen
-import com.kylix.algostudioseniormobiledevelopertest.screen.home.ToDoScreen
+import com.kylix.algostudioseniormobiledevelopertest.screen.home.HomeScreen
 
 @Composable
 fun NavGraph() {
@@ -16,7 +16,7 @@ fun NavGraph() {
         startDestination = ScreenNavigation.Home.route
     ) {
         composable(ScreenNavigation.Home.route) {
-            ToDoScreen(
+            HomeScreen(
                 onAddTask = {
                     navController.navigate(ScreenNavigation.AddTask.route)
                 }
