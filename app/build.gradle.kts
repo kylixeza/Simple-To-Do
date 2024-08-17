@@ -87,4 +87,5 @@ dependencies {
 
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
     implementation("com.airbnb.android:lottie-compose:4.2.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
