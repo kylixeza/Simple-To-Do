@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -70,19 +72,19 @@ fun TaskItem(
         label = "wiggle"
     )
 
-    Card(
+    Surface(
         modifier = modifier
             .padding(horizontal = 24.dp, vertical = 6.dp)
             .fillMaxWidth()
+            .graphicsLayer(rotationZ = wiggleRotation)
+            .shadow(2.dp, RoundedCornerShape(8.dp))
             .combinedClickable(
                 onClick = {},
                 onLongClick = {
                     onHoldPressed(task.id)
                 },
-            )
-            .graphicsLayer(rotationZ = wiggleRotation),
-        elevation = CardDefaults.cardElevation(2.dp),
-        colors = CardDefaults.cardColors(White)
+            ),
+        color = White
     ) {
         Row(
             modifier = Modifier
