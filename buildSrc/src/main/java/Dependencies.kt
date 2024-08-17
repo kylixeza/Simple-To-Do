@@ -22,8 +22,10 @@ object Versions {
 
     const val coreKtx = "1.13.1"
     const val lifecycleKtx = "2.8.4"
+    const val splashScreen = "1.0.1"
     const val activityCompose = "1.9.1"
     const val composeBom = "2023.08.00"
+    const val composeNavigation = "2.7.7"
 
     const val junit = "4.13.2"
     const val extJunit = "1.2.1"
@@ -31,18 +33,24 @@ object Versions {
 
     const val koin = "3.5.6"
     const val room = "2.6.1"
+
+    const val wheelPicker = "1.1.11"
 }
 
 object Libs {
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtx}"
     const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleKtx}"
     const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
+    const val splashScreenApi = "androidx.core:core-splashscreen:${Versions.splashScreen}"
     const val composeBom = "androidx.compose:compose-bom:${Versions.composeBom}"
 
     const val composeUi = "androidx.compose.ui:ui"
     const val composeUiGraphics = "androidx.compose.ui:ui-graphics"
     const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview"
+    const val composeUiTooling = "androidx.compose.ui:ui-tooling"
     const val composeMaterial3 = "androidx.compose.material3:material3"
+    const val lifecycleCompose = "androidx.lifecycle:lifecycle-runtime-compose-android:${Versions.lifecycleKtx}"
+    const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"
 
     const val koinBom = "io.insert-koin:koin-bom:${Versions.koin}"
     const val koinCore = "io.insert-koin:koin-core:${Versions.koin}"
@@ -52,6 +60,8 @@ object Libs {
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
+
+    const val wheelPicker = "com.github.commandiron:WheelPickerCompose:${Versions.wheelPicker}"
 }
 
 object TestDependencies {
@@ -77,7 +87,7 @@ infix fun DependencyHandler.androidTestImplOf(dependency: String) {
     add("androidTestImplementation", dependency)
 }
 
-infix fun DependencyHandler.debugImplementation(dependency: String) {
+infix fun DependencyHandler.debugImplOf(dependency: String) {
     add("debugImplementation", dependency)
 }
 
@@ -86,6 +96,8 @@ fun DependencyHandler.implComposeDependencies() {
     add("implementation", Libs.composeUiGraphics)
     add("implementation", Libs.composeUiToolingPreview)
     add("implementation", Libs.composeMaterial3)
+    add("implementation", Libs.lifecycleCompose)
+    add("implementation", Libs.composeNavigation)
 }
 
 fun DependencyHandler.implKoinDependencies() {

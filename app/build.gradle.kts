@@ -70,22 +70,20 @@ android {
 }
 
 dependencies {
-    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
     implOf (Libs.coreKtx)
     implOf (Libs.lifecycleKtx)
     implOf (Libs.activityCompose)
+    implOf (Libs.splashScreenApi)
 
     platformImplOf (Libs.koinBom)
     platformImplOf (Libs.composeBom)
 
     implComposeDependencies()
     implKoinDependencies()
+
     implRoomDependencies()
     ksp(Libs.roomCompiler)
 
-    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
-    implementation("com.airbnb.android:lottie-compose:4.2.0")
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implOf (Libs.wheelPicker)
+    debugImplOf (Libs.composeUiTooling)
 }
