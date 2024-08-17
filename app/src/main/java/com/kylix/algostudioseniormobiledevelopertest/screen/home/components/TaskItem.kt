@@ -119,7 +119,7 @@ fun TaskItem(
                     color = Black
                 )
                 Text(
-                    text = task.time,
+                    text = task.time.ifEmpty { "-" },
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = LightBlue

@@ -18,7 +18,7 @@ fun String.convertToFormattedDate(): String {
 
 fun String.calculateDateDifference(): String {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    val targetFormat = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    val targetFormat = DateTimeFormatter.ofPattern("dd MMMM yyyy")
 
     val today = LocalDate.parse(getCurrentDate(), formatter)
     val date = LocalDate.parse(this, formatter)
@@ -29,7 +29,12 @@ fun String.calculateDateDifference(): String {
         gap == 0L -> "Today ($targetDate)"
         gap == 1L -> "Tomorrow ($targetDate)"
         gap == -1L -> "Yesterday ($targetDate)"
-        gap > 1 -> "${date.dayOfWeek.name} ($targetDate)"
+        gap > 1 -> {
+            val day = date.dayOfWeek.name.lowercase().replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase() else it.toString()
+            }
+            "$day ($targetDate)"
+        }
         else -> ""
     }
 }
