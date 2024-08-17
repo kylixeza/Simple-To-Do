@@ -1,6 +1,5 @@
 package com.kylix.algostudioseniormobiledevelopertest.data.repository
 
-import android.util.Log
 import com.kylix.algostudioseniormobiledevelopertest.data.local.TaskDao
 import com.kylix.algostudioseniormobiledevelopertest.data.local.entitiy.TaskEntity
 import com.kylix.algostudioseniormobiledevelopertest.model.Task
