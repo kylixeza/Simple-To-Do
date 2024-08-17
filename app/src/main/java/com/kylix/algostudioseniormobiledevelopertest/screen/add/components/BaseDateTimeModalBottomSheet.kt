@@ -1,4 +1,4 @@
-package com.kylix.algostudioseniormobiledevelopertest.screen.home
+package com.kylix.algostudioseniormobiledevelopertest.screen.add.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -17,27 +17,37 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.commandiron.wheel_picker_compose.WheelDatePicker
+import com.commandiron.wheel_picker_compose.WheelTimePicker
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
-import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepOrange
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteModalBottomSheet(
+fun BaseDateTimeModalBottomSheet(
     state: SheetState,
     modifier: Modifier = Modifier,
+    title: String = "",
     onDismissRequest: () -> Unit = {},
     onCancel : () -> Unit = {},
-    onDelete: () -> Unit = {},
+    onSave: () -> Unit = {},
+    content: @Composable () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
+
     ModalBottomSheet(
         sheetState = state,
         onDismissRequest = onDismissRequest,
@@ -48,21 +58,18 @@ fun DeleteModalBottomSheet(
 
             Text(
                 modifier = Modifier.padding(start = 16.dp),
-                text = "Delete",
-                fontSize = 22.sp,
+                text = title,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
             )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "Are you sure to delete?",
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Divider(
                 color = Color(0xFFE0E0E0),
                 thickness = 1.dp
             )
+
+            content()
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,11 +88,11 @@ fun DeleteModalBottomSheet(
                         }
                     },
                     shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(1.dp, DeepOrange),
+                    border = BorderStroke(1.dp, DeepBlue),
                 ) {
                     Text(
                         text = "Cancel",
-                        color = DeepOrange
+                        color = DeepBlue
                     )
                 }
                 Button(
@@ -96,17 +103,90 @@ fun DeleteModalBottomSheet(
                         coroutineScope.launch {
                             state.hide()
                         }.invokeOnCompletion {
-                            if (!state.isVisible) onDelete()
+                            if (!state.isVisible) onSave()
                         }
                     },
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = DeepOrange
+                        containerColor = DeepBlue
                     ),
                 ) {
-                    Text("Delete")
+                    Text("Save")
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DateModalBottomSheet(
+    state: SheetState,
+    onDismissRequest: () -> Unit = {},
+    onCancel : () -> Unit = {},
+    onSave: (String) -> Unit = {},
+) {
+    var date by remember { mutableStateOf("") }
+
+    BaseDateTimeModalBottomSheet(
+        state = state,
+        title = "Set Date",
+        onDismissRequest = onDismissRequest,
+        onCancel = onCancel,
+        onSave = {
+            onSave(date)
+        }
+    ) {
+        WheelDatePicker(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            textColor = DeepBlue,
+            onSnappedDate = {
+                val day = if (it.dayOfMonth < 10) "0${it.dayOfMonth}" else "${it.dayOfMonth}"
+                val month = if (it.monthValue < 10) "0${it.monthValue}" else "${it.monthValue}"
+                date = "$day/$month/${it.year}"
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimeModalBottomSheet(
+    state: SheetState,
+    onDismissRequest: () -> Unit = {},
+    onCancel : () -> Unit = {},
+    onSave: (String) -> Unit = {},
+) {
+    var time by remember { mutableStateOf("") }
+
+    BaseDateTimeModalBottomSheet(
+        state = state,
+        title = "Set Time",
+        onDismissRequest = onDismissRequest,
+        onCancel = onCancel,
+        onSave = { onSave(time) }
+    ) {
+        WheelTimePicker(
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
+            textColor = DeepBlue,
+            onSnappedTime = {
+                val hour = if (it.hour < 10) "0${it.hour}" else it.hour
+                val minute = if (it.minute < 10) "0${it.minute}" else it.minute
+                time = "$hour:$minute"
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun DateTimeModalBottomSheetPreview() {
+    BaseDateTimeModalBottomSheet(
+        state = rememberModalBottomSheetState(),
+        title = "Add New Task"
+    ) {
+
     }
 }

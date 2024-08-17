@@ -37,7 +37,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,11 +52,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kylix.algostudioseniormobiledevelopertest.R
+import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.DateModalBottomSheet
+import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.TextAndTextFieldSection
+import com.kylix.algostudioseniormobiledevelopertest.screen.add.components.TimeModalBottomSheet
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.Black
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DarkGray
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.DeepBlue
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.White
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -259,77 +260,4 @@ fun AddTaskScreen(
         }
 
     }
-}
-
-@Composable
-fun TextAndTextFieldSection(
-    text: String = "",
-    value: String = "",
-    placeholder: String = "",
-    leadingIcon: @Composable (() -> Unit)? = null,
-    minSize: Dp = Dp.Unspecified,
-    maxSize: Dp = Dp.Unspecified,
-    needClick: Boolean = false,
-    onClicked: () -> Unit = {  },
-    onValueChange: (String) -> Unit = {},
-) {
-    Text(
-        text = text,
-        fontSize = 16.sp,
-        color = Black,
-        fontWeight = FontWeight.SemiBold
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFFF4F6F6))
-            .padding(12.dp)
-            .heightIn(min = minSize, max = maxSize),
-        textStyle = TextStyle(
-            color = Color.Gray,
-            fontSize = 16.sp
-        ),
-        readOnly = needClick,
-        decorationBox = { innerTextField ->
-            val rows: @Composable () -> Unit  = {
-                Row(
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    leadingIcon?.invoke()
-                    Spacer(modifier = Modifier.width(8.dp))
-                    innerTextField()
-                }
-                Row(
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    leadingIcon?.invoke()
-                    Spacer(modifier = Modifier.width(8.dp))
-                    if (value.isEmpty()) {
-                        Text(
-                            textAlign = TextAlign.Start,
-                            text = placeholder,
-                            style = TextStyle(color = Color.Gray, fontSize = 16.sp),
-                        )
-                    }
-                }
-            }
-            if (needClick) {
-                Box(
-                    modifier = Modifier.clickable { onClicked() },
-                ) { rows() }
-            } else {
-                rows()
-            }
-        }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AddTaskScreenPreview() {
-    AddTaskScreen()
 }
