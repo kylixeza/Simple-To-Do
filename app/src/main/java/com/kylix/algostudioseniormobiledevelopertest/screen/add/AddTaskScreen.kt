@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,16 +73,10 @@ fun AddTaskScreen(
     viewModel: AddTaskViewModel = koinViewModel(),
     onBack: () -> Unit = { }
 ) {
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") }
-    var time by remember { mutableStateOf("") }
+    val state by viewModel.addTaskState.collectAsState()
 
     val dateBottomSheetState = rememberModalBottomSheetState()
-    var showDateBottomSheet by remember { mutableStateOf(false) }
-
     val timeBottomSheetState = rememberModalBottomSheetState()
-    var showTimeBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -124,6 +119,7 @@ fun AddTaskScreen(
             }
         }
     ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -132,31 +128,34 @@ fun AddTaskScreen(
         ) {
             TextAndHighlightedTextField(
                 text = "Title",
-                value = title,
+                value = state.title,
                 placeholder = "Title Task",
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 )
             ) { value, containHighlightedWord ->
-                title = value
-                if (containHighlightedWord) date = getCurrentDate().convertToTextFieldDate()
+                viewModel.onTitleChanged(value)
+                if (containHighlightedWord) viewModel.onDateChanged(date = getCurrentDate().convertToTextFieldDate())
             }
+
             Spacer(modifier = Modifier.height(12.dp))
             TextAndTextFieldSection(
                 text = "Description",
-                value = description,
+                value = state.description,
                 placeholder = "Description Task",
                 minSize = 64.dp,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 )
-            ) { description = it }
+            ) { value ->
+                viewModel.onDescriptionChanged(value)
+            }
+
             Spacer(modifier = Modifier.height(12.dp))
             TextAndTextFieldSection(
                 text = "Date",
-                value = if (time.isEmpty()) date else "$date $time",
+                value = if (state.time.isEmpty()) state.date else "${state.date} ${state.time}",
                 placeholder = "Select Date",
-                onValueChange = { date = it },
                 leadingIcon = {
                     Icon(Icons.Default.DateRange,
                         contentDescription = null,
@@ -166,7 +165,7 @@ fun AddTaskScreen(
                 },
                 needClick = true,
                 onClicked = {
-                    showDateBottomSheet = true
+                    viewModel.onShowDateBottomSheet()
                 }
             )
 
@@ -191,12 +190,12 @@ fun AddTaskScreen(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
-                    checked = time.isNotEmpty() || showTimeBottomSheet,
+                    checked = state.time.isNotEmpty() || state.showTimeBottomSheet,
                     onCheckedChange = {
-                        if (time.isEmpty() && it) {
-                            showTimeBottomSheet = true
+                        if (state.time.isEmpty() && it) {
+                            viewModel.onShowTimeBottomSheet()
                         } else {
-                            time = ""
+                            viewModel.onTimeChanged("")
                         }
                     },
                     colors = SwitchDefaults.colors(
@@ -230,45 +229,40 @@ fun AddTaskScreen(
                         .weight(1f)
                         .padding(start = 8.dp),
                     onClick = {
-                        viewModel.insertTask(
-                            title = title,
-                            description = description,
-                            date = date,
-                            time = time.ifEmpty { null }
-                        )
+                        viewModel.insertTask()
                         onBack()
                     },
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = DeepBlue
                     ),
-                    enabled = title.isNotEmpty() && description.isNotEmpty() && date.isNotEmpty()
+                    enabled = state.title.isNotEmpty() && state.description.isNotEmpty() && state.date.isNotEmpty()
                 ) {
                     Text("Save")
                 }
             }
         }
 
-        if (showDateBottomSheet) {
+        if (state.showDateBottomSheet) {
             DateModalBottomSheet(
                 state = dateBottomSheetState,
-                onDismissRequest = { showDateBottomSheet = false },
-                onCancel = { showDateBottomSheet = false },
+                onDismissRequest = { viewModel.onHideTimeBottomSheet() },
+                onCancel = { viewModel.onHideDateBottomSheet() },
                 onSave = {
-                    date = it
-                    showDateBottomSheet = false
+                    viewModel.onDateChanged(it)
+                    viewModel.onHideDateBottomSheet()
                 }
             )
         }
 
-        if (showTimeBottomSheet) {
+        if (state.showTimeBottomSheet) {
             TimeModalBottomSheet(
                 state = timeBottomSheetState,
-                onDismissRequest = { showTimeBottomSheet = false },
-                onCancel = { showTimeBottomSheet = false },
+                onDismissRequest = { viewModel.onHideTimeBottomSheet() },
+                onCancel = { viewModel.onHideTimeBottomSheet() },
                 onSave = {
-                    time = it
-                    showTimeBottomSheet = false
+                    viewModel.onTimeChanged(it)
+                    viewModel.onHideTimeBottomSheet()
                 }
             )
         }
