@@ -1,6 +1,13 @@
 package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -37,6 +44,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -46,7 +54,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,6 +74,7 @@ import com.kylix.algostudioseniormobiledevelopertest.ui.theme.LightBlue
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.LightGray
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.LightOrange
 import com.kylix.algostudioseniormobiledevelopertest.ui.theme.White
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -212,29 +223,42 @@ fun TaskItem(
     onChecked: (Boolean) -> Unit = {},
     onHoldPressed: (Int) -> Unit = {}
 ) {
+    var playAnimation by remember { mutableStateOf(false) }
+    LaunchedEffect(task.isSelected) {
+        if (task.isSelected) {
+            playAnimation = true
+            delay(1000)
+            playAnimation = false
+        }
+    }
 
-    val composition by rememberLottieComposition(LottieCompositionSpec.Asset("confetti.json"))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        isPlaying = task.isSelected,
-        restartOnPlay = true,
+    val wiggleRotation by animateFloatAsState(
+        targetValue = if (playAnimation) 10f else 0f,
+        animationSpec = keyframes {
+            durationMillis = 1000
+            0f at 0
+            -10f at 100
+            10f at 200
+            -10f at 300
+            10f at 400
+            0f at 500
+        },
+        label = "wiggle"
     )
 
-    Surface(
+    Card(
         modifier = modifier
             .padding(horizontal = 24.dp, vertical = 6.dp)
             .fillMaxWidth()
-            .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(12.dp)
-            )
             .combinedClickable(
                 onClick = {},
                 onLongClick = {
                     onHoldPressed(task.id)
                 },
-            ),
-        color = White,
+            )
+            .graphicsLayer(rotationZ = wiggleRotation),
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(White)
     ) {
         Row(
             modifier = Modifier
@@ -252,6 +276,7 @@ fun TaskItem(
                     modifier = Modifier.fillMaxSize(),
                     checked = task.isSelected,
                     onCheckedChange = {
+                        if (it) playAnimation = true
                         onChecked(it)
                     },
                     colors = CheckboxDefaults.colors(
