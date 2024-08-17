@@ -43,7 +43,8 @@ class HomeViewModel(
         )
     }
 
-    fun deleteItemsByDay(date: String) {
+    fun deleteItemsByDay() {
+        val date = _homeState.value.currentDateWantToDelete
         viewModelScope.launch {
             val tasksOnThatDate = _homeState.value.task[date]?.filter { it.isSelected } ?: emptyList()
             tasksOnThatDate.forEach { task ->
@@ -52,9 +53,32 @@ class HomeViewModel(
         }
     }
 
-    fun deleteSpecificTask(id: Int) {
+    fun deleteSpecificTask() {
         viewModelScope.launch {
+            val id = _homeState.value.specificTaskIdWantToDelete
             repository.deleteTask(id)
         }
+    }
+
+    fun onShowBottomModalForMultipleTask(date: String) {
+        _homeState.value = _homeState.value.copy(
+            currentDateWantToDelete = date,
+            showDeleteModal = true,
+            deleteForMultipleItems = true
+        )
+    }
+
+    fun onShowBottomModalForSingleTask(id: Int) {
+        _homeState.value = _homeState.value.copy(
+            specificTaskIdWantToDelete = id,
+            showDeleteModal = true,
+            deleteForMultipleItems = false
+        )
+    }
+
+    fun onDismissBottomModal() {
+        _homeState.value = _homeState.value.copy(
+            showDeleteModal = false
+        )
     }
 }

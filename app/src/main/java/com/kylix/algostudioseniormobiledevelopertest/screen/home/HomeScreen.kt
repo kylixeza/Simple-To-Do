@@ -1,5 +1,6 @@
 package com.kylix.algostudioseniormobiledevelopertest.screen.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -56,9 +57,6 @@ fun HomeScreen(
     val state = viewModel.toDoState.collectAsState()
 
     val deleteModal = rememberModalBottomSheetState()
-    var currentDateWantToDelete by remember { mutableStateOf("") }
-    var specificTaskIdWantToDelete by remember { mutableIntStateOf(-1) }
-    var showDeleteModal by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -123,8 +121,7 @@ fun HomeScreen(
                                 viewModel.onTaskChecked(task.id, isChecked)
                             },
                             onHoldPressed = {
-                                specificTaskIdWantToDelete = it
-                                showDeleteModal = true
+                                viewModel.onShowBottomModalForSingleTask(it)
                             }
                         )
                         if (index == tasks.size - 1) {
@@ -135,8 +132,7 @@ fun HomeScreen(
                             ) {
                                 DeleteItemsCard(
                                     onDelete = {
-                                        currentDateWantToDelete = date
-                                        showDeleteModal = true
+                                        viewModel.onShowBottomModalForMultipleTask(date)
                                     }
                                 )
                             }
@@ -147,18 +143,19 @@ fun HomeScreen(
         }
     }
 
-    if (showDeleteModal) {
+    if (state.value.showDeleteModal) {
         DeleteModalBottomSheet(
             state = deleteModal,
-            onDismissRequest = { showDeleteModal = false },
-            onCancel = { showDeleteModal = false },
+            onDismissRequest = { viewModel.onDismissBottomModal() },
+            onCancel = { viewModel.onDismissBottomModal() },
             onDelete = {
-                if (specificTaskIdWantToDelete == -1) {
-                    viewModel.deleteItemsByDay(currentDateWantToDelete)
+                Log.d("HomeScree", "SpecificId: ${state.value.specificTaskIdWantToDelete}")
+                if (state.value.deleteForMultipleItems) {
+                    viewModel.deleteItemsByDay()
                 } else {
-                    viewModel.deleteSpecificTask(specificTaskIdWantToDelete)
+                    viewModel.deleteSpecificTask()
                 }
-                showDeleteModal = false
+                viewModel.onDismissBottomModal()
             }
         )
     }
